@@ -1,4 +1,4 @@
-name: Build Student Hub Admin V1 Android APK — 2.0.1
+name: Build Student Hub Admin V1 Android APK
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
           echo "Files present at repository root:"
           find . -maxdepth 2 -type f ! -path './.git/*' -print | sort
 
-          SOURCE_ZIP="student-hub-v1-admin-android-source-2.0.1.zip"
+          SOURCE_ZIP="student-hub-v1-admin-android-source-2.0.0.zip"
           if [ ! -f "$SOURCE_ZIP" ]; then
             echo "::error::Required source bundle is missing: $SOURCE_ZIP"
             echo "ZIP files actually present in the repository:"
@@ -183,17 +183,17 @@ jobs:
           echo "APK signature: PASS"
 
           BADGING="$("$AAPT" dump badging "$GENERATED_APK")"
-          printf '%s\n' "$BADGING" | grep -F "package: name='ug.studenthub.adminv1.app200' versionCode='201' versionName='2.0.1'" >/dev/null
+          printf '%s\n' "$BADGING" | grep -F "package: name='ug.studenthub.adminv1.app200' versionCode='200' versionName='2.0.0'" >/dev/null
           echo "Package and version: PASS"
           printf '%s\n' "$BADGING" | grep -E "^(package:|application-label:)" || true
 
           mkdir -p release
-          cp "$GENERATED_APK" release/Student-Hub-Admin-V1-2.0.1-debug.apk
-          (cd release && sha256sum Student-Hub-Admin-V1-2.0.1-debug.apk > Student-Hub-Admin-V1-2.0.1-debug.apk.sha256)
+          cp "$GENERATED_APK" release/Student-Hub-Admin-V1-2.0.0-debug.apk
+          (cd release && sha256sum Student-Hub-Admin-V1-2.0.0-debug.apk > Student-Hub-Admin-V1-2.0.0-debug.apk.sha256)
           echo "Final release file:"
-          ls -lh release/Student-Hub-Admin-V1-2.0.1-debug.apk release/Student-Hub-Admin-V1-2.0.1-debug.apk.sha256
+          ls -lh release/Student-Hub-Admin-V1-2.0.0-debug.apk release/Student-Hub-Admin-V1-2.0.0-debug.apk.sha256
           echo "SHA-256:"
-          cat release/Student-Hub-Admin-V1-2.0.1-debug.apk.sha256
+          cat release/Student-Hub-Admin-V1-2.0.0-debug.apk.sha256
 
           {
             echo "## Student Hub Admin V1 — APK verification"
@@ -201,9 +201,9 @@ jobs:
             echo "- APK ZIP integrity: PASS"
             echo "- APK signature: PASS"
             echo "- Package: ug.studenthub.adminv1.app200"
-            echo "- Version: 2.0.1 (code 201)"
+            echo "- Version: 2.0.0 (code 200)"
             echo "- File size: $SIZE_BYTES bytes"
-            echo "- SHA-256: $(sha256sum release/Student-Hub-Admin-V1-2.0.1-debug.apk | cut -d ' ' -f 1)"
+            echo "- SHA-256: $(sha256sum release/Student-Hub-Admin-V1-2.0.0-debug.apk | cut -d ' ' -f 1)"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Save stable private-test signing identity
@@ -215,9 +215,9 @@ jobs:
       - name: Upload verified APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Student-Hub-Admin-V1-2.0.1-verified-APK
+          name: Student-Hub-Admin-V1-2.0.0-verified-APK
           path: |
-            release/Student-Hub-Admin-V1-2.0.1-debug.apk
-            release/Student-Hub-Admin-V1-2.0.1-debug.apk.sha256
+            release/Student-Hub-Admin-V1-2.0.0-debug.apk
+            release/Student-Hub-Admin-V1-2.0.0-debug.apk.sha256
           if-no-files-found: error
           retention-days: 14
